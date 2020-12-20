@@ -3,6 +3,9 @@ package com.example.drawer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,8 +17,10 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
-public class MainActivity extends AppCompatActivity {
+public class quiz1 extends AppCompatActivity {
 
+    boolean flag=false;
+    TextView tv;
     NavigationView navigationView;
     DrawerLayout drawerLayout;
     Toolbar toolbar;
@@ -23,7 +28,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_quiz1);
+
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -44,20 +50,20 @@ public class MainActivity extends AppCompatActivity {
                 {
                     case R.id.calculator :
                         Toast.makeText(getApplicationContext(),"Calculator is clicked",Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(MainActivity.this, calculator.class);
+                        Intent intent = new Intent(quiz1.this, calculator.class);
                         startActivity(intent);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
 
                     case R.id.myquiz :
                         Toast.makeText(getApplicationContext(),"My Quiz is clicked",Toast.LENGTH_LONG).show();
-                        Intent intent1 = new Intent(MainActivity.this, quiz1.class);
+                        Intent intent1 = new Intent(quiz1.this, quiz1.class);
                         startActivity(intent1);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.assign3 :
                         Toast.makeText(getApplicationContext(),"Opening Welcome Page",Toast.LENGTH_LONG).show();
-                        Intent intent2 = new Intent(MainActivity.this, MainActivity.class);
+                        Intent intent2 = new Intent(quiz1.this, MainActivity.class);
                         startActivity(intent2);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
@@ -66,5 +72,30 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
+        Button start= (Button)findViewById(R.id.start);
+        start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent=new Intent(getApplicationContext(),quiz2.class);
+
+                startActivity(intent);
+            }
+        });
+
+
     }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        // put your code here...
+        Intent intent = getIntent();
+        String score= intent.getStringExtra("score");
+        tv=(TextView)findViewById(R.id.textView3);
+        tv.setText("Score :"+score+"/10");
+    }
+
+
 }
