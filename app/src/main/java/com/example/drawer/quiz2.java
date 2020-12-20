@@ -22,7 +22,7 @@ public class quiz2 extends AppCompatActivity {
     RadioGroup rg;
     RadioButton rb1,rb2,rb3,rb4;
     public static int iterator,score;
-    TextView mytimer;
+    TextView timer;
 
     private static final long START_TIME_IN_MILLIS = 15000;
     private CountDownTimer mCountDownTimer;
@@ -36,7 +36,7 @@ public class quiz2 extends AppCompatActivity {
             }
             @Override
             public void onFinish() {
-                
+                nextMCQS();
             }
         }.start();
     }
@@ -44,7 +44,7 @@ public class quiz2 extends AppCompatActivity {
         int minutes = (int) (mTimeLeftInMillis / 1000) / 60;
         int seconds = (int) (mTimeLeftInMillis / 1000) % 60;
         String timeLeftFormatted = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds);
-        mytimer.setText(timeLeftFormatted);
+        timer.setText(timeLeftFormatted);
     }
 
     String questions[] = {
@@ -78,7 +78,7 @@ public class quiz2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz2);
-
+        timer = findViewById(R.id.timer);
         next=(Button)findViewById(R.id.next);
         finish=(Button)findViewById(R.id.finish);
         textView=(TextView) findViewById(R.id.textView);
@@ -93,11 +93,15 @@ public class quiz2 extends AppCompatActivity {
         rb2.setText(opt[1]);
         rb3.setText(opt[2]);
         rb4.setText(opt[3]);
+
+        startTimer();
         score=0;
         iterator=0;
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mCountDownTimer.cancel();
+                mTimeLeftInMillis = START_TIME_IN_MILLIS;
                 if(rg.getCheckedRadioButtonId()==-1)
                 {
                     Toast toast = Toast.makeText(getApplicationContext(), "Please select a choice", Toast.LENGTH_LONG);
@@ -111,7 +115,7 @@ public class quiz2 extends AppCompatActivity {
                     score++;
                     Log.i("score",score+"");
                 }
-
+                startTimer();
                 iterator++;
 
                 if(iterator<questions.length)
@@ -143,6 +147,19 @@ public class quiz2 extends AppCompatActivity {
         Intent in = new Intent(getApplicationContext(),quiz1.class);
         in.putExtra("score",score+"");
         startActivity(in);
+    }
+
+    public void nextMCQS(){
+        mCountDownTimer.cancel();
+        mTimeLeftInMillis = START_TIME_IN_MILLIS;
+        iterator++;
+        textView.setText(questions[iterator]);
+        rb1.setText(opt[iterator*4]);
+        rb2.setText(opt[iterator*4 +1]);
+        rb3.setText(opt[iterator*4 +2]);
+        rb4.setText(opt[iterator*4 +3]);
+        rg.clearCheck();
+        startTimer();
     }
 
 }
